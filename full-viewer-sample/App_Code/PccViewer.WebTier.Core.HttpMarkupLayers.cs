@@ -196,6 +196,8 @@ namespace PccViewer.WebTier.Core
                         }
                     }
                 }
+				
+				list = cleanList(list);
 
                 sendResponse(context, (int)HttpStatusCode.OK, list);
             }
@@ -343,6 +345,97 @@ namespace PccViewer.WebTier.Core
 
         private string generateId() {
             return Guid.NewGuid().ToString("N");
+        }
+
+        public List<Dictionary<string, object>> getLayers(string viewingSessionId)
+        {
+            var list = new List<Dictionary<string, object>>();
+            string path = PccConfig.MarkupLayerRecordsPath;
+
+            // Perform an HTTP GET request to retrieve properties about the viewing session from PCCIS. 
+            // The properties will include an identifier of the source document that will be used below
+            // to construct the name of file where markups are stored.
+            string uriString = PccConfig.ImagingService + "/ViewingSession/u" + viewingSessionId;
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uriString);
+            request.Method = "GET";
+            string responseBody = null;
+            request.Headers.Add("acs-api-key", PccConfig.ApiKey);
+            try
+            {
+                // Send request to PCCIS and get response
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                using (StreamReader sr = new StreamReader(response.GetResponseStream(), System.Text.Encoding.UTF8))
+                {
+                    responseBody = sr.ReadToEnd();
+                }
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+
+            ViewingSessionProperties viewingSessionProperties = serializer.Deserialize<ViewingSessionProperties>(responseBody);
+
+            string documentMarkupId = string.Empty;
+            viewingSessionProperties.origin.TryGetValue("documentMarkupId", out documentMarkupId);
+
+            try
+            {
+                // generate a list of all of the layerRecord files
+                if (Directory.Exists(path))
+                {
+                    string[] fileList = Directory.GetFiles(path);
+
+                    foreach (string filePath in fileList)
+                    {
+                        // Each summary 
+                        var summary = getLayerRecordSummary(filePath, viewingSessionProperties, documentMarkupId);
+
+                        if (summary != null)
+                        {
+                            list.Add(summary);
+                        }
+                    }
+                }
+
+                return list;
+
+            }
+            catch (Exception e)
+            {
+                // If there was an error getting a list of annotation files for this document
+                // Assume there are no valid annotation files for this document
+                return null;
+            }
+        }
+
+        private List<Dictionary<string, object>> cleanList(List<Dictionary<string, object>> list)
+        {
+            if (User.name == "admin")
+            {
+                // Return all items for the admin persona
+                return list;
+            }
+            else
+            {
+                List<Dictionary<string, object>> cleanList = new List<Dictionary<string, object>>();
+                int count = list.Count;
+
+                for (int i = 0; i < count; i++)
+                {
+                    if (list[i]["name"].ToString() == "admin")
+                    {
+                        cleanList.Add(list[i]);
+                    }
+                    else if (list[i]["name"].ToString() == User.name)
+                    {
+                            cleanList.Add(list[i]);
+                    }
+                }
+
+                return cleanList;
+                
+            }
         }
     }
 }

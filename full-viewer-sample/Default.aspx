@@ -4,12 +4,58 @@
     // Create a ViewingSession based on the document defined in the query parameter
     // Example: ?document=sample.doc
     string viewingSessionId = string.Empty;
+    string originalDocumentName = string.Empty;
 
-    string documentQueryParameter = Request.QueryString["document"];
-    string originalDocumentName = documentQueryParameter;
-    
+    string documentQueryParameter = string.Empty;
+	string layerID = string.Empty;
+    bool isAdmin = false;
+
+    if (Request.QueryString["document"] == null)
+    {
+        documentQueryParameter = "PdfDemoSample.pdf";
+    }
+    else
+    {
+        documentQueryParameter = Request.QueryString["document"];
+    }
+	
+	 if (Request.QueryString["user"] != null)
+    {
+        PccViewer.WebTier.Core.User.setName(Request.QueryString["user"]);
+    }
+    else
+    {
+        // In a real application we would take some other action. 
+        // For the demo's sake, we'll assume user1 as defined in the global User.name
+    }
+
+    // Check if user is admin
+    if (PccViewer.WebTier.Core.User.name == "admin")
+    {
+        isAdmin = true;
+    }
+
+    originalDocumentName = documentQueryParameter;
+
     CreateSession createSession = new CreateSession();
-    viewingSessionId = createSession.fromDocumentName(originalDocumentName);
+    viewingSessionId = createSession.fromDocumentName(originalDocumentName); 
+    
+    // markupLayers contains a list of all valid markup files for the currently viewed document
+    // We will iterate over this 
+    MarkupLayers markupLayers = new MarkupLayers();
+    List<Dictionary<string, object>> layers = markupLayers.getLayers(viewingSessionId);
+
+    // Find this user persona's layer
+    for (int i = 0; i < layers.Count; i++)
+    {
+        if (layers[i]["name"].ToString() == PccViewer.WebTier.Core.User.name)
+        {
+            layerID = layers[i]["layerRecordId"].ToString();
+        }
+    }
+
+    // If the current user hasn't created a layer for this document we have  to use the current layer ID
+    // and edit the layer name as soon as the viewer is initialized
 %>
 <!DOCTYPE html>
 <html>
@@ -35,8 +81,8 @@
         <script src="viewer-assets/js/html5shiv.js"></script>
     <![endif]-->
 
-    <script src="viewer-assets/js/viewercontrol.js"></script>
-    <script src="viewer-assets/js/viewer.js"></script>
+    <script src="//pcc-assets.accusoft.com/v10.3/js/viewercontrol.js"></script>
+    <script src="//pcc-assets.accusoft.com/v10.3/js/viewer.js"></script>
 </head>
 <body>
     <div id="viewer1"></div>
@@ -48,13 +94,16 @@
     </div>
        
     <script type="text/javascript">
+        var viewerControl = '';
         var viewingSessionId = '<%=HttpUtility.JavaScriptStringEncode(viewingSessionId)%>';
         var languageJson = '<%=languageJson%>';
         var languageItems = jQuery.parseJSON(languageJson);
         var htmlTemplates = <%=htmlTemplates%>;
         var searchTerms = <%=searchJson%>;
         var redactionReasons = <%=redactionReasons%>;
-        var originalDocumentName = '<%=HttpUtility.JavaScriptStringEncode(originalDocumentName)%>';
+        var originalDocumentName = '<%=originalDocumentName%>';
+        var layerId = '<%=layerID%>';
+        var loadAllLayers = <%=isAdmin.ToString().ToLower()%>;
 
         var pluginOptions = {
             documentID: viewingSessionId,
@@ -73,7 +122,11 @@
                 download: true,
                 fullScreenOnInit: true,
                 advancedSearch:true
-            }
+            },
+            editableMarkupLayerSource: "LayerRecordId",
+            lockEditableMarkupLayer: true,
+            autoLoadAllLayers: loadAllLayers,
+            editableMarkupLayerValue: layerId
         };
         
         function processAttachments() {
@@ -115,6 +168,15 @@
                 
             // Check if the document has any attachments
             setTimeout(processAttachments, 500);
+
+            // For a user persona that does not have a layer defined we need to create a layer based on their user persona
+            if (layerId.length <= 0) {
+                // Get the current layer
+                var thisLayer = viewerControl.getActiveMarkupLayer();
+                // Set name to current persona
+                thisLayer.setName('<%=PccViewer.WebTier.Core.User.name%>');
+            }
+
         });
     </script>
 </body>

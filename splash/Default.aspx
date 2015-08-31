@@ -60,17 +60,23 @@
       </a>
     </div>
     <div class="header">
-      <h1>PCC Viewer Sample</h1>
+      <h1>PCC Annotation List Demo</h1>
     </div>
   </div>
   <div class="main">
     <div class="viewer-picker">
-      <h2>Select a Viewer</h2>
+      <h2>Select a Persona</h2>
       <ul class="viewer-list">
-        <li><button data-viewer-select='full-viewer' class="btn-large" id="select-full-viewer">Full Viewer</button></li>
-        <li><button data-viewer-select='book-reader' class="btn-large" id="select-book-reader">Book Reader</button></li>
+        <li><button data-persona-select='admin-persona' class="btn-large" id="select-admin-persona">Admin Persona</button></li>
+        <li><button data-persona-select='user1-persona' class="btn-large" id="select-user1-persona">User One</button></li>
+        <li><button data-persona-select='user2-persona' class="btn-large" id="select-user2-persona">User Two</button></li>
+        <!-- <li><button data-viewer-select='book-reader' class="btn-large" id="select-book-reader">Book Reader</button></li> -->
       </ul>
     </div>
+      <div class="persona-description">
+          <p id="descriptions">
+          </p>
+      </div>
     <div class="document-picker">
       <h2>Select a Document</h2>
       <p id="sampleTitleText">Choose a document to load in the viewer from the list or drag one from your desktop in the drop zone below.</p>
@@ -96,51 +102,61 @@
         </div>
     </div>
   </div>
-</div>
+<!-- </div> -->
 
 </body>
 
     <script>
-        var viewerPaths = {
-            'book-reader' : 'book-reader-sample/index.html',
-            'full-viewer' : 'full-viewer-sample/Default.aspx'
+        var personas = {
+            'admin-persona': '/full-viewer-sample/Default.aspx?user=admin',
+            'user1-persona': '/full-viewer-sample/Default.aspx?user=user1',
+            'user2-persona': '/full-viewer-sample/Default.aspx?user=user2'
         };
 
-        var selectedViewerPath;
+        var descriptions = {
+            'admin-persona': 'The admin persona can view all other layers and will automatically load all layers for review, but can only modify their own layer.',
+            'user1-persona': 'A generic persona that can only view and modify their own layer and the admin\'s comments on their layer. Will not load all layers for review.',
+            'user2-persona': 'A second generic persona that can only view and modify their own layer and the admin\'s comments on their layer. Will not load all layers for review.'
+        }
+
+        var selectedPersona;
 
         $(document).ready(function() {
-            $("[data-viewer-select]").click(function(e) {
-                var viewer = $(e.target).data('viewer-select');
-                updateSelectedViewer(viewer);
+            $("[data-persona-select]").click(function(e) {
+                var persona = $(e.target).data('persona-select');
+                updateSelectedViewer(persona);
             });
         });
 
-        function updateSelectedViewer(viewer) {
-            selectedViewerPath = viewerPaths[viewer];
+        function updateSelectedViewer(persona) {
+            selectedPersona = personas[persona];
 
             $("a[data-document]").each(function(index, element) {
                 var document = $(element).data("document"),
-                    url = selectedViewerPath + "?document=" + document;
+                    url = selectedPersona + "&document=" + document;
 
                 $(element).attr('href', url);
             });
 
-            window.localStorage.setItem('splash-page-sample-viewer', viewer);
+            window.localStorage.setItem('splash-page-sample-viewer', persona);
 
             // update appearance of buttons
-            $("[data-viewer-select]").removeClass('selected');
-            $("[data-viewer-select=" + viewer + "]").addClass('selected');
+            $("[data-persona-select]").removeClass('selected');
+            $("[data-persona-select=" + persona + "]").addClass('selected');
+
+            // update text
+            $('#descriptions').text(descriptions[persona]);
         }
 
-        var initialViewer = 'full-viewer';
+        var initialPersona = 'admin-persona';
         if (typeof window.localStorage !== 'undefined') {
             // attempt to read the last used viewer from local storage
             var storedViewer = window.localStorage.getItem('splash-page-sample-viewer');
-            if (storedViewer && viewerPaths[storedViewer]) {
-                initialViewer = storedViewer;
+            if (storedViewer && personas[storedViewer]) {
+                initialPersona = storedViewer;
             }
         }
-        updateSelectedViewer(initialViewer);
+        updateSelectedViewer(initialPersona);
 
         (function () {
             var DropZone = function (opts) {
@@ -322,7 +338,7 @@
                     //console.log(content);
                     if (content && content.filename && content.filename !== "") {
                         //execute original callback
-                        window.location.href = selectedViewerPath + "?document=" + encodeURIComponent(content.filename);
+                        window.location.href = selectedViewerPath + "?document=" + content.filename;
                         opts.done(null, content);
 
                         cleanUp();
@@ -391,7 +407,7 @@
                 //hide overlay
                 dropzone && dropzone.hide();
 
-                window.location.href = selectedViewerPath + "?document=" + encodeURIComponent(fileName);
+                window.location.href = selectedViewerPath + "?document=" + fileName;
             };
 
             //create viewing session

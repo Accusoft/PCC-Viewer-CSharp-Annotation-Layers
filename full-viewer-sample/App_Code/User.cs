@@ -6,22 +6,22 @@ using System.Web;
 /// <summary>
 /// Summary description for User
 /// </summary>
-namespace PccViewer.WebTier.Core
+namespace Pcc
 {
     public static class User
     {
-        static User() { name = "user1"; }
+        static User() { name = "admin"; }
 
         public static String name
         {
             get; private set;
         }
 
-        public static void setName (string newName)
+        public static void setName(string newName)
         {
             name = newName;
         }
 
 
-    } 
+    }
 }

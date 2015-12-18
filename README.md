@@ -1,4 +1,4 @@
-**PCC Annotation Layers Sample:**
+# PCC Annotation Layers Sample:
 
 Using a few of the new features introduced by the PCC 10.3 release, we have created a demo illustrating what we believe is the most common use case for layered annotations. The viewer itself still has no concept of a "user" or how one user might differ from another. This is primarily because the viewer does not perform authentication or user validation internally. 
 
@@ -6,17 +6,17 @@ Instead, we can enforce some idea of user ownership by restricting which layers 
 
 For clarity, this demo uses URL query parameters to differentiate between different users. This is not a secure method and has no authentication. Instead, this demo is intended to illustrate the strategies and the places where the base sample code can be adapted to fit a particular business or workflow need. To that end, using a query parameter instead of session-based authentication allows a developer to quickly switch back and forth between different users and quickly verify which persona they are currently viewing, as well as avoiding the extra complications associated with the increased security that would be present in a production environment. Like other demos in this series, this is intended as a teaching tool and is not intended to be deployable code.  
 
-**Setup:**
+### Setup
 
-**Requirements:**
+#### Requirements
 
 This demo code requires Microsoft .NET Framework 4.0, IIS, and ASP.NET 4.0. Additionally, you will need to edit the "full-viewer-sample\viewer-webtier\pcc.config" file to indicate a valid Prizm Services instance. By default, this sample will attempt to use the Prizm Services located at “localhost:18681”.
 
-**Installation:**
+#### Installation
 
 First, make any changes to the configuration file located at "full-viewer-sample\viewer-webtier\pcc.config". Typical changes include indicating a working Prizm Services instance and changing the location for the Markup, Markup Layer, and Imagestamp directories. By default, the demo will use directories that are located within the full-viewer-sample directory. Please make sure those directories exist and that the full-viewer-sample application has read and write access.
 
-From the IIS Manager:
+##### From the IIS Manager
 
 * Right-click on "Default Web Site" and select “Add application”.
 
@@ -28,7 +28,25 @@ From the IIS Manager:
 
 To use the sample, browse for the splash application at "localhost/splash", select a user persona and then select or upload a document.
 
-**Changes from default sample:**
+##### Modify the relevant PAS config file
+
+* Depending on which OS is running PAS and where PAS was installed, a different file will have to be modified.
+
+* Add the following to override the default PAS routes:
+```
+routeHandlers.GetMarkupLayers.url: "http://localhost/full-viewer-sample/viewer-webtier/markupHandler.ashx"
+routeHandlers.CreateMarkupLayer.url: "http://localhost/full-viewer-sample/viewer-webtier/markupHandler.ashx"
+routeHandlers.GetMarkupLayer.url: "http://localhost/full-viewer-sample/viewer-webtier/markupHandler.ashx"
+routeHandlers.UpdateMarkupLayer.url: "http://localhost/full-viewer-sample/viewer-webtier/markupHandler.ashx"
+routeHandlers.DeleteMarkupLayer.url: "http://localhost/full-viewer-sample/viewer-webtier/markupHandler.ashx"
+```
+
+##### Verify the pcc.config settings
+
+This file is located in `full-viewer-sample\viewer-webtier` and contains the settings to indicate how this application can contact Prizm Application Services as well as the Prizm Platform Services. Verify that those settings match the settings for your envrionment.
+
+
+### Changes from default sample
 
 There are a few minor changes to enable this database insertion/loading sample.
 
@@ -37,3 +55,9 @@ There are a few minor changes to enable this database insertion/loading sample.
 * Change to automatically set the current layer name immediately after the viewer is created (if the user did not previously own a valid layer for the current document).
 
 * Added the cleanList method to HTTPMarkupLayers class to return a list of layers based on the current user.
+
+# Support and Purchasing
+
+For questions or support please visit our [website](https://www.accusoft.com/support/) or contact our Support team directly at support@accusoft.com.
+
+For purchasing information please visit the [Prizm Content Connect](https://www.accusoft.com/products/prizm-content-connect-pcc/overview/) main page or contact our Sales team directly at sales@accusoft.com

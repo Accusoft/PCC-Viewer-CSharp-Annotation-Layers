@@ -1,4 +1,4 @@
-namespace PccViewer.WebTier.Core
+﻿namespace Pcc
 {
     using System;
     using System.Collections.Generic;
@@ -35,8 +35,7 @@ namespace PccViewer.WebTier.Core
         public string password { get; set; }
 
         /// <summary>
-        /// Specifies the text to use for watermarking as supported by the Flash viewer. This property
-        /// is not currently used for the HTML5 viewer.
+        /// Specifies the text to use for watermarking
         /// </summary>
         public string watermarkText { get; set; }
 
@@ -46,7 +45,7 @@ namespace PccViewer.WebTier.Core
         /// will not use it directly. It is useful for association in log files and 
         /// other operations, like annotations.
         /// </summary>
-        public string externalId { get; set; }
+        public string documentMarkupID { get; set; }
 
         /// <summary>
         /// This is the index for an attached document. PCCIS will initialize this 

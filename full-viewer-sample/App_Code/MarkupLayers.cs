@@ -1,4 +1,4 @@
-namespace PccViewer.WebTier.Core
+﻿namespace Pcc
 {
     using System;
     using System.Text;
@@ -12,31 +12,31 @@ namespace PccViewer.WebTier.Core
     using System.Drawing;
     using System.Web.Script.Serialization;
 
-    public class MarkupLayers : PccHandler
+    public class MarkupLayers 
     {
         JavaScriptSerializer serializer = new JavaScriptSerializer();
-
-        public override void ProcessRequest(HttpContext context, Match match)
+        string resourcePath = string.Concat(HttpRuntime.AppDomainAppPath, PccConfig.markupLayerRecordsPath);
+        public void ProcessRequest(HttpContext context, Match match)
         {
-            // Environmental Setup
-            PccConfig.LoadConfig("viewer-webtier/pcc.config");
-            string resourcePath = PccConfig.MarkupLayerRecordsPath;
             
+            // Environmental Setup
+            //PccConfig.LoadConfig("viewer-webtier/pcc.config");
+
             // Check if this folder exsts, and if it does not, create it
             if (!Directory.Exists(resourcePath))
             {
                 Directory.CreateDirectory(resourcePath);
             }
-
+            
             // find the request method
             string method = context.Request.RequestType.ToLower();
             string methodHeader = context.Request.Headers["X-HTTP-Method-Override"];
-
+            
             if (!String.IsNullOrEmpty(methodHeader))
             {
                 method = methodHeader.ToLower();
             }
-
+            
             JavaScriptSerializer serializer = new JavaScriptSerializer();
 
             string viewingSessionId = match.Groups["ViewingSessionId"].Value;
@@ -46,11 +46,11 @@ namespace PccViewer.WebTier.Core
             // Perform an HTTP GET request to retrieve properties about the viewing session from PCCIS. 
             // The properties will include an identifier of the source document that will be used below
             // to construct the name of file where markups are stored.
-            string uriString = PccConfig.ImagingService + "/ViewingSession/" + viewingSessionId;
+            string uriString = PccConfig.prizmServiceAddress + "/ViewingSession/" + viewingSessionId;
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uriString);
             request.Method = "GET";
             string responseBody = null;
-            request.Headers.Add("acs-api-key", PccConfig.ApiKey);
+            request.Headers.Add("acs-api-key", PccConfig.acsApiKey);
             try
             {
                 // Send request to PCCIS and get response
@@ -63,7 +63,7 @@ namespace PccViewer.WebTier.Core
             catch (Exception e)
             {
                 var json = createJSONError("ServerError", layerRecordId, e.Message);
-                sendResponse(context, (int)HttpStatusCode.BadGateway, json);
+                sendResponse(context, (int)HttpStatusCode.NotFound, json);
                 return;
             }
 
@@ -71,9 +71,8 @@ namespace PccViewer.WebTier.Core
 
             string documentMarkupId = string.Empty;
             viewingSessionProperties.origin.TryGetValue("documentMarkupId", out documentMarkupId);
-            string recordNamePrefix = PccConfig.MarkupLayerRecordsPath + documentMarkupId + "_" + viewingSessionProperties.attachmentIndex + "_";
-            //var json;
-
+            string recordNamePrefix = resourcePath + documentMarkupId + "_" + viewingSessionProperties.attachmentIndex + "_";
+            
             if (String.IsNullOrEmpty(recordNamePrefix))
             {
                 //BadGateway = 502
@@ -81,6 +80,7 @@ namespace PccViewer.WebTier.Core
                 sendResponse(context, (int)HttpStatusCode.BadGateway, json);
                 return;
             }
+            
 
             // add the file extension
             string resourceName = null;
@@ -90,11 +90,11 @@ namespace PccViewer.WebTier.Core
             }
 
             string fullPath = resourceName;
-            
+
             // route to the correct method
             if (String.IsNullOrEmpty(layerRecordId) && method == "get")
             {
-                getList(context, resourcePath, viewingSessionProperties, documentMarkupId);
+                getList(context, viewingSessionProperties, documentMarkupId);
                 return;
             }
             else if (String.IsNullOrEmpty(layerRecordId) && method == "post")
@@ -106,6 +106,7 @@ namespace PccViewer.WebTier.Core
                 createResource(context, fullPath, layerRecordId);
                 return;
             }
+            
             else if (!String.IsNullOrEmpty(layerRecordId) && method == "get")
             {
                 getResource(context, resourceName, layerRecordId);
@@ -148,9 +149,10 @@ namespace PccViewer.WebTier.Core
                         {
                             name = (string)jsonObj["name"];
                         }
-                        
+
                         string originalXmlName = "";
-                        if (jsonObj.ContainsKey("originalXmlName")) {
+                        if (jsonObj.ContainsKey("originalXmlName"))
+                        {
                             originalXmlName = (string)jsonObj["originalXmlName"];
                         }
 
@@ -175,16 +177,17 @@ namespace PccViewer.WebTier.Core
             return null;
         }
 
-        private void getList(HttpContext context, String path, ViewingSessionProperties viewingSessionProperties, string documentMarkupId)
+        private void getList(HttpContext context, ViewingSessionProperties viewingSessionProperties, string documentMarkupId)
         {
+            //string path= string.Empty;
             var list = new List<Dictionary<string, object>>();
 
             try
             {
                 // generate a list of all of the layerRecord files
-                if (Directory.Exists(path))
+                if (Directory.Exists(resourcePath))
                 {
-                    string[] fileList = Directory.GetFiles(path);
+                    string[] fileList = Directory.GetFiles(resourcePath);
 
                     foreach (string filePath in fileList)
                     {
@@ -196,8 +199,8 @@ namespace PccViewer.WebTier.Core
                         }
                     }
                 }
-				
-				list = cleanList(list);
+
+                list = cleanList(context, list);
 
                 sendResponse(context, (int)HttpStatusCode.OK, list);
             }
@@ -210,7 +213,8 @@ namespace PccViewer.WebTier.Core
 
         private void getResource(HttpContext context, String resourcePath, String layerRecordId)
         {
-            if (File.Exists(resourcePath)) {
+            if (File.Exists(resourcePath))
+            {
                 Stream contentStream = null;
                 try
                 {
@@ -224,8 +228,10 @@ namespace PccViewer.WebTier.Core
                     var error = createJSONError("ServerError", layerRecordId, e.Message);
                     sendResponse(context, 580, error);
                 }
-                finally { 
-                    if (contentStream != null) {
+                finally
+                {
+                    if (contentStream != null)
+                    {
                         contentStream.Dispose();
                     }
                 }
@@ -245,7 +251,8 @@ namespace PccViewer.WebTier.Core
                 context.Request.InputStream.CopyTo(file);
                 file.Close();
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 var error = createJSONError("ServerError", layerRecordId, e.Message);
                 sendResponse(context, 580, error);
                 return;
@@ -260,7 +267,8 @@ namespace PccViewer.WebTier.Core
         private void updateResource(HttpContext context, String resourcePath, String layerRecordId)
         {
             // make sure file does already exist
-            if (!File.Exists(resourcePath)) {
+            if (!File.Exists(resourcePath))
+            {
                 sendResponse(context, (int)HttpStatusCode.NotFound);
                 return;
             }
@@ -272,7 +280,8 @@ namespace PccViewer.WebTier.Core
                 context.Request.InputStream.CopyTo(file);
                 file.Close();
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 var error = createJSONError("ServerError", layerRecordId, e.Message);
                 sendResponse(context, 580, error);
                 return;
@@ -283,13 +292,15 @@ namespace PccViewer.WebTier.Core
 
         private void deleteResource(HttpContext context, String resourcePath, String layerRecordId)
         {
-            if (File.Exists(resourcePath)) {
+            if (File.Exists(resourcePath))
+            {
                 try
                 {
                     File.Delete(resourcePath);
                     sendResponse(context, (int)HttpStatusCode.NoContent);
                 }
-                catch (Exception e) {
+                catch (Exception e)
+                {
                     var error = createJSONError("ServerError", layerRecordId, e.Message);
                     sendResponse(context, 580, error);
                 }
@@ -303,7 +314,8 @@ namespace PccViewer.WebTier.Core
             return;
         }
 
-        private void sendResponse(HttpContext context, int status, Object body = null) {
+        private void sendResponse(HttpContext context, int status, Object body = null)
+        {
             if (body != null)
             {
                 var jsonBody = toJSON(body);
@@ -318,11 +330,12 @@ namespace PccViewer.WebTier.Core
         private Dictionary<string, object> createJSONError(String errorCode, String layerRecordId, String errorDetails = null)
         {
             var json = new Dictionary<string, object>();
-            
+
             json.Add("errorCode", errorCode);
             json.Add("layerRecordId", layerRecordId);
 
-            if (!String.IsNullOrEmpty(errorDetails)) {
+            if (!String.IsNullOrEmpty(errorDetails))
+            {
                 json.Add("errorDetails", errorDetails);
             }
 
@@ -334,32 +347,35 @@ namespace PccViewer.WebTier.Core
             return serializer.Serialize(obj);
         }
 
-        private Dictionary<string, object> parseJSON(String jsonStr) {
+        private Dictionary<string, object> parseJSON(String jsonStr)
+        {
             return serializer.Deserialize<Dictionary<string, object>>(jsonStr);
         }
 
-        private string toBase64(String source) {
+        private string toBase64(String source)
+        {
             var bytes = Encoding.UTF8.GetBytes(source);
             return Convert.ToBase64String(bytes);
         }
 
-        private string generateId() {
+        private string generateId()
+        {
             return Guid.NewGuid().ToString("N");
         }
 
         public List<Dictionary<string, object>> getLayers(string viewingSessionId)
         {
             var list = new List<Dictionary<string, object>>();
-            string path = PccConfig.MarkupLayerRecordsPath;
+            string path = resourcePath;
 
             // Perform an HTTP GET request to retrieve properties about the viewing session from PCCIS. 
             // The properties will include an identifier of the source document that will be used below
             // to construct the name of file where markups are stored.
-            string uriString = PccConfig.ImagingService + "/ViewingSession/u" + viewingSessionId;
+            string uriString = PccConfig.prizmServiceAddress + "/ViewingSession/u" + viewingSessionId;
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uriString);
             request.Method = "GET";
             string responseBody = null;
-            request.Headers.Add("acs-api-key", PccConfig.ApiKey);
+            request.Headers.Add("acs-api-key", PccConfig.acsApiKey);
             try
             {
                 // Send request to PCCIS and get response
@@ -409,12 +425,26 @@ namespace PccViewer.WebTier.Core
             }
         }
 
-        private List<Dictionary<string, object>> cleanList(List<Dictionary<string, object>> list)
+        private List<Dictionary<string, object>> cleanList(HttpContext context, List<Dictionary<string, object>> list)
         {
             if (User.name == "admin")
             {
                 // Return all items for the admin persona
-                return list;
+                List<Dictionary<string, object>> cleanList = new List<Dictionary<string, object>>();
+                int count = list.Count;
+
+                for (int i = 0; i < count; i++)
+                {
+                    if (list[i]["name"].ToString() == "admin")
+                    {
+                        //Do nothing the admin can already see their annotations   
+                    }
+                    else
+                    {
+                        cleanList.Add(list[i]);
+                    }
+                }
+                return cleanList;
             }
             else
             {
@@ -427,14 +457,10 @@ namespace PccViewer.WebTier.Core
                     {
                         cleanList.Add(list[i]);
                     }
-                    else if (list[i]["name"].ToString() == User.name)
-                    {
-                            cleanList.Add(list[i]);
-                    }
                 }
 
                 return cleanList;
-                
+
             }
         }
     }

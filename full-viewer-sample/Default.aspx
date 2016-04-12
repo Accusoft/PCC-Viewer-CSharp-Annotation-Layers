@@ -52,7 +52,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     
-    <title>PCC HTML5 .NET C# Sample</title>
+    <title>PrizmDoc Full Viewer .NET C# Sample</title>
     <link rel="icon" href="favicon.ico" type="image/x-icon" />
 
     <link rel="stylesheet" href="viewer-assets/css/normalize.min.css">
@@ -69,8 +69,8 @@
         <script src="viewer-assets/js/html5shiv.js"></script>
     <![endif]-->
 
-    <script src="//pcc-assets.accusoft.com/v10.5/js/viewercontrol.js"></script>
-    <script src="//pcc-assets.accusoft.com/v10.5/js/viewer.js"></script>
+    <script src="//pcc-assets.accusoft.com/v11.0/js/viewercontrol.js"></script>
+    <script src="//pcc-assets.accusoft.com/v11.0/js/viewer.js"></script>
 </head>
 <body>
     <div id="viewer1"></div>

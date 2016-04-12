@@ -1,0 +1,21 @@
+// create an icon mixin
+.icon-mixin(@name, @offsetLeft: 0px, @offsetTop: 0px) {
+    // get the top and left variables based on the icon name
+    @leftVar: "pcc-icon-@{name}-left";
+    @topVar: "pcc-icon-@{name}-top";
+    
+    // generate the background position
+    background-position: (@@leftVar + @offsetLeft) (@@topVar + @offsetTop);
+}
+
+// in a loop,
+// write the top and left variables for each icon
+// output the icon CSS using the mixin
+<% icons.forEach(function (icon) { %>
+    @pcc-icon-<%- icon.name %>-left: <%- -icon.left %>px;
+    @pcc-icon-<%- icon.name %>-top: <%- -icon.top %>px;
+
+    .pcc-icon-<%- icon.name %>{
+        .icon-mixin(<%- icon.name %>);
+    }
+<% }); %>

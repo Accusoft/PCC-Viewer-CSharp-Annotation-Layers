@@ -1,16 +1,17 @@
-﻿namespace Pcc
+﻿using System;
+using System.Text;
+using System.Web;
+using System.IO;
+using System.Net;
+using System.Collections.Generic;
+using System.Web.Configuration;
+using System.Web.SessionState;
+using System.Text.RegularExpressions;
+using System.Drawing;
+using System.Web.Script.Serialization;
+
+namespace Pcc
 {
-    using System;
-    using System.Text;
-    using System.Web;
-    using System.IO;
-    using System.Net;
-    using System.Collections.Generic;
-    using System.Web.Configuration;
-    using System.Web.SessionState;
-    using System.Text.RegularExpressions;
-    using System.Drawing;
-    using System.Web.Script.Serialization;
 
     public class MarkupLayers 
     {
@@ -62,7 +63,7 @@
             }
             catch (Exception e)
             {
-                var json = createJSONError("ServerError", layerRecordId, e.Message);
+                var json = createJSONError("ServerError1", layerRecordId, e.Message);
                 sendResponse(context, (int)HttpStatusCode.NotFound, json);
                 return;
             }
@@ -206,7 +207,7 @@
             }
             catch (Exception e)
             {
-                var error = createJSONError("ServerError", "", e.Message);
+                var error = createJSONError("ServerError2", "", e.Message);
                 sendResponse(context, 580, error);
             }
         }
@@ -225,7 +226,7 @@
                 }
                 catch (Exception e)
                 {
-                    var error = createJSONError("ServerError", layerRecordId, e.Message);
+                    var error = createJSONError("ServerError3", layerRecordId, e.Message);
                     sendResponse(context, 580, error);
                 }
                 finally
@@ -253,7 +254,7 @@
             }
             catch (Exception e)
             {
-                var error = createJSONError("ServerError", layerRecordId, e.Message);
+                var error = createJSONError("ServerError4", layerRecordId, e.Message);
                 sendResponse(context, 580, error);
                 return;
             }
@@ -282,7 +283,7 @@
             }
             catch (Exception e)
             {
-                var error = createJSONError("ServerError", layerRecordId, e.Message);
+                var error = createJSONError("ServerError5", layerRecordId, e.Message);
                 sendResponse(context, 580, error);
                 return;
             }
@@ -301,7 +302,7 @@
                 }
                 catch (Exception e)
                 {
-                    var error = createJSONError("ServerError", layerRecordId, e.Message);
+                    var error = createJSONError("ServerError6", layerRecordId, e.Message);
                     sendResponse(context, 580, error);
                 }
 

@@ -1,0 +1,491 @@
+html {
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #535756;
+  font-family: 'Raleway', Helvetica, Verdana, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #f8f8f8;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  padding: 0;
+}
+
+h2 span {
+  margin-left: 5px;
+  padding-left: 7px;
+  border-left: 1px solid #747c7b;
+  
+  font-weight: 400;
+  color: #747c7b;
+}
+
+h3 {
+  font-size: 175%;
+  font-weight: 300;
+  text-align: center;
+}
+
+a {
+  text-decoration: none;
+  color: #f8f8f8;
+  -webkit-transition: background-color .5s, color .5s, opacity .5s, border .5s;
+          transition: background-color .5s, color .5s, opacity .5s, border .5s;
+}
+
+a:hover,
+a:focus,
+a:active {
+  color: rgba(248,158,92,.5);
+}
+
+.btn {
+  padding: 10px 16px;
+  border: 0;
+  border-radius: 0;
+  background-color: #5d6362;
+  font-size: 18px;
+  line-height: 1.33;
+  color: #fff;
+  opacity: 1;
+  -webkit-transition: background-color .5s, color .5s, opacity .5s, border .5s;
+          transition: background-color .5s, color .5s, opacity .5s, border .5s;
+}
+
+.btn:hover,
+.btn:focus,
+.btn:active {
+  opacity: .75;
+}
+
+.btn.btn-small {
+  padding: 8px 16px;
+  font-size: 16px;
+}
+
+.btn.btn-alt {
+  background-color: #ff7e4a;
+}
+
+img {
+  max-width: 100%;
+}
+
+.container, .instructions {
+  margin: 0 auto;
+  width: 80%;
+}
+
+.page-header {
+  padding: 15px 0;
+  background-color: #535756;
+}
+
+.branding,
+.product-name {
+  display: inline-block;
+}
+
+.branding {
+  width: 50%;
+}
+
+.product-name {
+  width: 45%;
+}
+
+.logo,
+.tagline {
+  display: inline-block;
+  line-height: 40px;
+}
+
+.logo img{
+  border: none;
+}
+
+.tagline {
+  margin-left: 30px;
+  font-size: 70%;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  vertical-align: top;
+}
+
+.product-name h1 {
+  font-size: 250%;
+  font-weight: 300;
+  text-align: right;
+  text-transform: lowercase;
+}
+
+.title-bar {
+  padding: 13px 0;
+  background-color: #2d2d2d;
+}
+
+.title-bar h2 {
+  font-size: 22px;
+  font-weight: 300;
+  text-transform: lowercase;
+}
+
+.choose-viewer,
+.choose-document {
+  padding: 15px 0;
+}
+
+.choose-viewer {
+  background-color: #353535;
+}
+
+.segmented-control {
+  display: inline-block;
+  margin: 15px auto;
+  border: 1px solid #f8f8f8;
+}
+
+
+.control-wrapper {
+  text-align: center;
+}
+
+.segmented-control > button {
+  font-family: inherit;
+  float: left;
+  width: 200px;
+  padding: 12px 0;
+  font-size: 150%;
+  line-height: 1.33;
+  background-color: transparent;
+  text-align: center;
+  text-transform: lowercase;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  color: #f8f8f8;
+}
+
+.segmented-control > button.selected{
+    background-color: #f8f8f8;
+    color: #2d2d2d;
+}
+
+.segmented-control > button > i{
+    display: none;
+}
+
+.segmented-control > button.selected > i{
+    color: #5abaae;
+    display: inline;
+}
+
+.choose-document p {
+  margin-bottom: 0;
+  text-align: center;
+}
+
+.document-list {
+  margin: 15px 0 30px;
+  padding: 0;
+  list-style: none;
+  font-size: 150%;
+  text-align: center;
+}
+
+.document-list li {
+  margin-right: 1em;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.document-list a {
+  border-bottom: 1px dotted rgba(233,235,234,.5);
+}
+
+.document-list a:hover,
+.document-list a:focus,
+.document-list a:active {
+  border-bottom: 1px dotted rgba(233,235,234,.3);
+}
+
+.upload-button{
+  text-align: center;
+  padding: 10px 0;
+}
+
+.drop-zone {
+  margin: 15px auto;
+  padding: 19px;
+  width: 70%;
+  min-height: 100px;
+  background-color: #424645;
+  background-color: rgba(0,0,0,.2);
+  text-align: center;
+}
+
+.drop-zone p {
+  margin: 10px 0;
+  font-size: 150%;
+  font-weight: 300;
+  line-height: 1.5;
+}
+
+.drop-zone p + .btn {
+  margin-top: 15px;
+}
+
+.table-wrapper {
+  margin: 15px auto;
+  width: 90%;
+}
+
+.table-header {
+  margin: 0;
+  padding: 8px;
+  border: 1px dotted #f8f8f8;
+  border-bottom: none;
+  background-color: #ADAFAF;
+  background-color: rgba(248,248,248,.55);
+  color: #5d6362;
+}
+
+.table-scroll {
+  height: 240px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.template-list {
+  width: 100%;
+  background-color: #7D807F;
+  table-layout: fixed;
+  background-color: rgba(248,248,248,.25);
+}
+
+.template-list th,
+.template-list td {
+  padding: 8px;
+}
+
+.template-list th[scope="row"] {  
+  width: 55%;
+  border: 1px dotted #f8f8f8;
+  border-bottom: 0;
+  font-size: 140%;
+  font-weight: 500;
+  text-align: left;
+}
+
+.template-list td {
+  width: 15%;
+  border: 1px dotted #f8f8f8;
+  border-left: 0;
+  border-bottom: 0;
+  word-wrap: normal;
+  font-size: 120%;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.template-list td.table-template-name {
+    font-size: 120%;
+    font-weight: normal;
+    text-align: left;
+}
+
+.template-list td.table-button {
+    width: 70px;
+}
+
+.template-list tr:last-of-type th,
+.template-list tr:last-of-type td {
+  border-bottom: 1px dotted #f8f8f8;
+}
+
+.upload-zone{
+  margin-top:10px;
+  clear:both;
+}
+
+/* Begin Dialog Styles */
+.dialog {
+    background: rgba(236, 236, 236, 0.5);
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+}
+
+.dialog-container {
+    background: #ffffff;
+    background: rgb(53, 53, 53);
+    bottom: 0;
+    color: #ffffff;
+    height: 96%;
+    left: 0;
+    margin: auto;
+    max-height: 50px;
+    max-width: 480px;
+    overflow: hidden;
+    position: absolute;
+    right: 0;
+    text-align: left;
+    -webkit-transition: max-height 150ms;
+    transition: max-height 150ms;
+    top: 0;
+    width: 96%;
+    box-shadow: 1px 2px 20px 8px #838383;
+}
+
+.pcc-legacy .dialog-container {
+    height: 50px;
+    max-height: none;
+    max-width: none;
+    width: 480px;
+}
+
+.dialog-close-button {
+    background: none !important;
+    padding: 0;
+    position: absolute;
+    right: -1px;
+    font-size: 25px;
+    top: 2px;
+}
+
+.dialog-close-button .pcc-icon {
+    max-height: 100%;
+    max-width: 100%;
+}
+
+.dialog-title {
+    margin: 0 0 0.5em;
+}
+
+.dialog-content {
+    padding: 15px;
+    text-align:center
+}
+
+.dialog-content .document-drop {
+    font-size: 1.2em;
+    text-align: center;
+}
+
+.dialog-content > select {
+    padding: 3px;
+    font-size: 19px;
+}
+
+.dialog-content .drop-zone {
+    margin-bottom: 0;
+    width: 100%;
+}
+/* End Dialog Styles */
+
+
+@media only screen 
+  and (min-width: 1023px) 
+  and (max-width: 1109px) {
+  .tagline {
+      margin: 0;
+  }
+}
+
+@media only screen 
+  and (min-width: 0) 
+  and (max-width: 495px) {
+
+    .template-list tbody td {
+        border-width: 0 0 0 1px;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        display: inline-block;
+        width: 33.333333333%;
+    }
+
+    .template-list tbody td:last-child {
+        border-right-width: 1px;
+    }
+
+    .template-list tbody td.table-template-name {
+        border-width: 1px;
+        display: block;
+        width: 100%;
+        background-color: #494949;
+    }
+
+    .template-list tbody td.table-button {
+        width: 33.33%;
+    }
+}
+
+@media only screen 
+  and (min-width: 0) 
+  and (max-width: 1023px) {
+  .container, .branding, .logo, .drop-zone  {
+    width: 100%;
+  }
+  .table-wrapper {
+    width: 95%;
+  }
+  .product-name {
+      display:none;
+  }
+  .branding, .logo, .product-name h1, .title-bar{
+    text-align: center;
+  }
+  .logo, .tagline {
+    display: block;
+    line-height:25px;
+  }
+}
+
+@media only screen 
+  and (min-width: 0) 
+  and (max-width: 900px ) {
+  .document-list li {
+    margin-top: 1em;
+    display: block;
+  }
+}
+
+@media only screen 
+  and (min-width: 650px) 
+  and (max-width: 1060px) {
+  .document-list li {
+    margin-top: 1em;
+    display: block;
+    float: left;
+    width: 45%;
+  }
+}
+
+@media only screen 
+  and (min-width: 0) 
+  and (max-width: 515px) {
+  .segmented-control > button {
+    font-size: 126%;
+    width: 100%;
+    float: none;
+  }
+}

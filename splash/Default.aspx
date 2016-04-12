@@ -12,14 +12,15 @@
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>PCC .NET C# Sample Home</title>
+        <title>PrizmDoc .NET C# Sample Home</title>
         <link href="http://fonts.googleapis.com/css?family=Raleway:300,400" rel="stylesheet" type="text/css" />
-        <link rel="stylesheet" href="sample-assets/css/splash.css" type="text/css" />
-        <link rel="stylesheet" href="sample-assets/css/fontello.css" type="text/css" />
+        <link rel="stylesheet" href="assets/css/splash.css" type="text/css" />
+        <link rel="stylesheet" href="assets/css/fontello.css" type="text/css" />
+        <link rel="icon" type="image/png" href="assets/img/favicon.ico" />
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-        <script> window.jQuery || document.write('<script src="sample-assets/js/jquery-1.10.2.min.js"><\/script>');</script>
+        <script> window.jQuery || document.write('<script src="assets/js/jquery-1.10.2.min.js"><\/script>');</script>
         <script>
             (function () {
         window.request = function (obj, done) {
@@ -47,21 +48,18 @@
                 <div class="branding">
                     <div class="logo">
                         <a href="https://www.accusoft.com">
-                            <img src="sample-assets/img/accusoft_logo.png" alt="Accusoft">
+                            <img src="assets/img/accusoft_logo.png" alt="Accusoft">
                         </a>
-                    </div>
-                    <div class="tagline">
-                        Unparalleled Imaging Solutions
                     </div>
                 </div>
                 <div class="product-name">
-                    <h1>Prizm Content Connect</h1>
+                    <h1>PrizmDoc</h1>
                 </div>
             </div>
         </header>
         <div class="title-bar">
             <div class="container">
-                <h2>Prizm Content Connect (PCC) <span>Annotation List Demo</span></h2>
+                <h2>PrizmDoc <span>Annotation List Demo</span></h2>
             </div>
         </div>
         <div class="choose-viewer">
@@ -88,16 +86,6 @@
         <div class="container">
           <div class="main">
             <div class="viewer-picker">
-              <!--
-
-                OLD PERSONA SELECTOR
-
-                <ul class="viewer-list">
-                <li><button data-persona-select='admin-persona' class="btn-large" id="select-admin-persona">Admin Persona</button></li>
-                <li><button data-persona-select='user1-persona' class="btn-large" id="select-user1-persona">User One</button></li>
-                <li><button data-persona-select='user2-persona' class="btn-large" id="select-user2-persona">User Two</button></li>        
-              </ul>
-              -->
               <div class="choose-document">
                   <p id="descriptions">
                   </p>
@@ -114,10 +102,13 @@
                             <li><a data-document="DxfDemoSample.dxf">AutoCAD</a></li>
                             <li><a data-document="TiffDemoSample.tif">Multi-Page TIFF</a></li>
                             <li><a data-document="JPegDemoSample.jpg">JPEG</a></li>
-                            <li><button class="btn" id="upload">Upload</button></li>
+                            <li><a data-document="EmailSample.msg">Email</a></li>
                         </ul>
                         <div class="upload-zone">
                             <h3>upload a document</h3>
+                            <div class="upload-button">
+                                <button class="btn" id="upload">Upload</button></a>
+                            </div>                    
                             <div class="drop-zone" id="drop_zone">
                                 <p><span id="dragdropText">Drag and drop a file here</span>
                                 <br> 
@@ -184,4 +175,6 @@
         }
         updateSelectedPersona(initialPersona);
     </script>
+    <script type="text/javascript" src="assets/js/splash-config.js"></script>
+    <script type="text/javascript" src="assets/js/main-splash.js"></script>
 </html>

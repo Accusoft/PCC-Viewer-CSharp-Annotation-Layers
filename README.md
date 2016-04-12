@@ -1,6 +1,6 @@
-# PCC Annotation Layers Sample:
+# PrizmDoc Annotation Layers Sample:
 
-Using a few of the new features introduced by the PCC 10.3 release, we have created a demo illustrating what we believe is the most common use case for layered annotations. The viewer itself still has no concept of a "user" or how one user might differ from another. This is primarily because the viewer does not perform authentication or user validation internally. 
+This is a demo that illustrates what we believe is the most common use case for layered annotations. The viewer itself still has no concept of a "user" or how one user might differ from another. This is primarily because the viewer does not perform authentication or user validation internally. 
 
 Instead, we can enforce some idea of user ownership by restricting which layers can or cannot load. In this demo, we are working with the assumption that all users will  create and own only one annotation layer per document and we identify that layer by the user’s name. A user will only be able to see their own layer and any comments left by the "admin" user on their layer. We have also created an ‘admin user’ for the purpose of reviewing multiple layers. The admin user will have their own layer which will store their comments and they can view all other layers created for the given document. The admin view for a document will also toggle on the option to automatically load all layers for a given document. All other users will have the option to load layers, that they are permitted to review, on demand.
 
@@ -10,11 +10,13 @@ For clarity, this demo uses URL query parameters to differentiate between differ
 
 #### Requirements
 
-This demo code requires Microsoft .NET Framework 4.0, IIS, and ASP.NET 4.0. Additionally, you will need to edit the "full-viewer-sample\viewer-webtier\pcc.config" file to indicate a valid Prizm Services instance. By default, this sample will attempt to use the Prizm Services located at “localhost:18681”.
+This demo code requires Microsoft .NET Framework 4.0, IIS, ASP.NET 4.0 and the lastest version of the PrizmDoc Client and Server installers.
+
+Additionally, you will need to edit the "full-viewer-sample\viewer-webtier\pcc.config" file to indicate a valid PrizmDoc Server instance. By default, this sample will attempt to use the PrizmDoc Server located at “localhost:18681”.
 
 #### Installation
 
-First, make any changes to the configuration file located at "full-viewer-sample\viewer-webtier\pcc.config". Typical changes include indicating a working Prizm Services instance and changing the location for the Markup, Markup Layer, and Imagestamp directories. By default, the demo will use directories that are located within the full-viewer-sample directory. Please make sure those directories exist and that the full-viewer-sample application has read and write access.
+First, make any changes to the configuration file located at "full-viewer-sample\viewer-webtier\pcc.config". Typical changes include indicating a working PrizmDoc Server instance and changing the location for the Markup, Markup Layer, and Imagestamp directories. By default, the demo will use directories that are located within the full-viewer-sample directory. Please make sure those directories exist and that the full-viewer-sample application has read and write access.
 
 ##### From the IIS Manager
 
@@ -43,7 +45,7 @@ routeHandlers.DeleteMarkupLayer.url: "http://localhost/full-viewer-sample/viewer
 
 ##### Verify the pcc.config settings
 
-This file is located in `full-viewer-sample\viewer-webtier` and contains the settings to indicate how this application can contact Prizm Application Services as well as the Prizm Platform Services. Verify that those settings match the settings for your envrionment.
+This file is located in `full-viewer-sample\viewer-webtier` and contains the settings to indicate how this application can contact PAS as well as the PrizmDoc Server. Verify that those settings match the settings for your envrionment.
 
 
 ### Changes from default sample
@@ -60,4 +62,4 @@ There are a few minor changes to enable this database insertion/loading sample.
 
 For questions or support please visit our [website](https://www.accusoft.com/support/) or contact our Support team directly at support@accusoft.com.
 
-For purchasing information please visit the [Prizm Content Connect](https://www.accusoft.com/products/prizm-content-connect-pcc/overview/) main page or contact our Sales team directly at sales@accusoft.com
+For purchasing information please visit the [PrizmDoc](https://www.accusoft.com/products/prizm-content-connect-pcc/overview/) main page or contact our Sales team directly at sales@accusoft.com

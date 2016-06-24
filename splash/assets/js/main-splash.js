@@ -24,10 +24,10 @@ var selectedViewerPath;
 $(document).ready(function() {
     $(".segmented-control > button").click(function(e) {
         var viewer = $(e.currentTarget).data('viewer-select');
-        updateSelectedViewer(viewer);
+        //updateSelectedViewer(viewer);
     });
 });
-
+/*
 function updateSelectedViewer(viewer) {
     selectedViewerPath = viewerPaths[viewer];
     $("a[data-document]").each(function(index, element) {
@@ -42,7 +42,9 @@ function updateSelectedViewer(viewer) {
 
     $("[data-viewer-select=" + viewer + "]").addClass('selected').find('i').addClass('icon-ok-circled');
 }
+*/
 var initialViewer = 'full-viewer';
+var viewer = 'full-viewer';
 if (typeof window.localStorage !== 'undefined') {
     // attempt to read the last used viewer from local storage
     var storedViewer = window.localStorage.getItem('splash-page-sample-viewer');
@@ -50,7 +52,7 @@ if (typeof window.localStorage !== 'undefined') {
         initialViewer = storedViewer;
     }
 }
-updateSelectedViewer(initialViewer);
+//updateSelectedViewer(initialViewer);
 (function() {
     var DropZone = function(opts) {
         //save scope

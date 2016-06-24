@@ -205,7 +205,7 @@ namespace Pcc
                 {
                     continue;
                 }
-                context.Response.Headers[headerKey] = response.Headers[headerKey];
+                context.Response.AddHeader(headerKey, response.Headers[headerKey]);
             }
 
             context.Response.ContentType = response.ContentType;

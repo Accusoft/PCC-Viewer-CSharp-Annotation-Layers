@@ -385,13 +385,19 @@
             </div>
         </div>
 
-        <div class="pcc-row pcc-clear pcc-search-nav">
-            <div class="pcc-col-6">
-                <button class="pcc-full" disabled data-pcc-search="prevResult"><%= previous %></button>
-            </div>
-            <div class="pcc-col-6">
-                <button class="pcc-full" disabled data-pcc-search="nextResult"><%= next %></button>
-            </div>
+        <div class="pcc-row pcc-clear pcc-search-nav pcc-center">
+            <button class="pcc-align-left" data-pcc-search="prevResultsPage" title="<%= searchResultsNavigation.previousPageResults %>">
+                <span>&#9664;&#9664;</span>
+            </button>
+            <button data-pcc-search="prevResult" title="<%= searchResultsNavigation.previousResult %>">
+                <span>&#9650;</span>
+            </button>
+            <button data-pcc-search="nextResult" title="<%= searchResultsNavigation.nextResult %>">
+                <span>&#9660;</span>
+            </button>
+            <button class="pcc-align-right" data-pcc-search="nextResultsPage" title="<%= searchResultsNavigation.nextPageResults %>">
+                <span>&#9654;&#9654;</span>
+            </button>
         </div>
 
         <div class="pcc-search-results-container pcc-hide" data-pcc-search-container="results">

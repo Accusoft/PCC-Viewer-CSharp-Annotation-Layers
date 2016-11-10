@@ -12,7 +12,7 @@
     "gulp-load-plugins": "^1.2.0",
     "gulp-rename": "^1.2.2",
     "gulp-sourcemaps": "^1.6.0",
-    "gulp-svgfallback": "^3.0.2",
+    "gulp-svgfallback": "^4.0.1",
     "jsdoc": "3.3.0-alpha3",
     "jshint": "~2.5.1",
     "promises-aplus-tests": "~2.0.4"

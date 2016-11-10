@@ -20,29 +20,14 @@ var viewerPaths = {
     'book-reader': config.viewers.bookReader,
     'full-viewer': config.viewers.full
 };
-var selectedViewerPath;
+
 $(document).ready(function() {
     $(".segmented-control > button").click(function(e) {
         var viewer = $(e.currentTarget).data('viewer-select');
         //updateSelectedViewer(viewer);
     });
 });
-/*
-function updateSelectedViewer(viewer) {
-    selectedViewerPath = viewerPaths[viewer];
-    $("a[data-document]").each(function(index, element) {
-        var document = $(element).data("document"),
-            url = selectedViewerPath + "?document=" + document;
-        $(element).attr('href', url);
-    });
-    window.localStorage.setItem('splash-page-sample-viewer', viewer);
-    // update appearance of buttons
-    // Removing and adding css classes of the icon to overcome IE8 repaint bug
-    $("[data-viewer-select]").removeClass('selected').find('i').removeClass('icon-ok-circled');
 
-    $("[data-viewer-select=" + viewer + "]").addClass('selected').find('i').addClass('icon-ok-circled');
-}
-*/
 var initialViewer = 'full-viewer';
 var viewer = 'full-viewer';
 if (typeof window.localStorage !== 'undefined') {
@@ -213,7 +198,7 @@ if (typeof window.localStorage !== 'undefined') {
             //console.log(content);
             if (content && content.filename && content.filename !== "") {
                 //execute original callback
-                window.location.href = selectedViewerPath + "?document=" + encodeURIComponent(content.filename);
+                window.location.href = "../full-viewer-sample/Default.aspx?document=" + encodeURIComponent(content.filename);
                 opts.done(null, content);
                 cleanUp();
             }
@@ -250,7 +235,7 @@ if (typeof window.localStorage !== 'undefined') {
     var dropzoneError = function(err) {
         switch (err) {
             case 'skip':
-                window.location.href = selectedViewerPath + "?document=WordDemoSample.doc";
+                window.location.href = "../full-viewer-sample/Default.aspx?document=WordDemoSample.doc";
                 break;
             default:
                 console.log('upload error', err);
@@ -270,7 +255,7 @@ if (typeof window.localStorage !== 'undefined') {
         var fileName = data.filename;
         //hide overlay
         dropzone && dropzone.hide();
-        window.location.href = selectedViewerPath + "?document=" + encodeURIComponent(fileName);
+        window.location.href = "../full-viewer-sample/Default.aspx?document=" + encodeURIComponent(fileName);
     };
     //create viewing session
     var createSessionByName = function(name) {
@@ -291,7 +276,7 @@ if (typeof window.localStorage !== 'undefined') {
         //IE8 compatible cancel of event
         ev.stopPropagation ? ev.stopPropagation() : ev.cancelBubble = true;
         ev.preventDefault ? ev.preventDefault() : ev.returnValue = false;
-        window.location.href = selectedViewerPath + "?document=WordDemoSample.doc";
+        window.location.href = "../full-viewer-sample/Default.aspx?document=WordDemoSample.doc";
     });
     document.querySelector('#upload').onclick = function() {
         dropzone.upload();
